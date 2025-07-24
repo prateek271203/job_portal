@@ -7,7 +7,7 @@ const path = require('path');
 dotenv.config();
 const app = express();
 
-
+// ✅ Place this right after app initialization
 const allowedOrigins = [
   'http://localhost:3000',
   'https://velvety-nougat-6393da.netlify.app'
@@ -15,6 +15,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman or mobile)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -39,9 +40,6 @@ app.use('/api/user', require('./routes/user'));
 app.get('/', (req, res) => {
   res.send('Job Portal API is running...');
 });
-
-// ✅ Handle preflight requests
-app.options('*', cors());
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
